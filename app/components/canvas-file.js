@@ -1,5 +1,3 @@
-import FileReader from 'window';
-
 var CanvasFileComponent = Ember.Component.extend({
   actions: {
     start: function() {

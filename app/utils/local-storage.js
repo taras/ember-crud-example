@@ -1,11 +1,9 @@
 import App from 'ember-crud-example/app';
 import guid from 'ember-crud-example/utils/guid';
-import localStorage from 'window';
 
 var LocalStorage = Ember.Object.extend({
-  key: App.get( 'localStorageKey' ),
   getKey: function( type ) {
-    return "%@.%@".fmt( this.get('key'), type );
+    return type;
   },
   create: function( model ) {
     var type = model.constructor;

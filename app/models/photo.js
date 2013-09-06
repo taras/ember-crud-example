@@ -1,5 +1,5 @@
 import Model from 'ember-crud-example/models/index';
-import guid from 'ember-crud-example/guid';
+import guid from 'ember-crud-example/utils/guid';
 
 var Photo = Model.extend({
   guid: null,

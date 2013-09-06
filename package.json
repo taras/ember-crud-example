@@ -1,6 +1,6 @@
 {
-  "name": "app-kit",
-  "namespace": "appkit",
+  "name": "ember-crud-example",
+  "namespace": "ember-crud-example",
   "version": "0.0.0",
   "main": "index.js",
   "directories": {

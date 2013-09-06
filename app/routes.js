@@ -1,8 +1,10 @@
 function Routes() {
-  // // routes/resources
-  // this.resource('posts', function() {
-  //   this.route('new');
-  // });
+  this.resource('photos', { path: '/photos' } , function(){
+    this.route( 'new' );
+  });
+  this.resource('photo', { path: '/photo/:guid' }, function(){
+    this.route( 'edit' );
+  });
 }
 
 export default Routes;

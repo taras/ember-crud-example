@@ -1,6 +1,7 @@
 var IndexRoute = Ember.Route.extend({
-  model: function() {
-    return ['red', 'yellow', 'blue'];
+  beforeModel: function( transition ) {
+    // redirect root to photos
+    this.transitionTo( 'photos' );
   }
 });
 

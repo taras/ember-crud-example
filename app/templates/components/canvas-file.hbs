@@ -1,0 +1,9 @@
+<div class="thumbnail" {{action 'start'}}>
+  <img {{bindAttr src=src}} class="preview"/>
+  <img class="shadow hide"/>
+  <canvas class="hide"></canvas>
+</div>
+<input type="file" class="hide" id="imageField">
+<div>
+  <button class="btn btn-primary" {{action 'start'}}>{{yield}}</button>
+</div>

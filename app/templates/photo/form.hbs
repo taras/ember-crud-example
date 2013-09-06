@@ -1,0 +1,18 @@
+  <div class="control-group">
+    <label class="control-label" for="imageField">Image</label>
+    <div class="controls">
+      {{#canvas-file width=250 height=250 value=image}}Upload image{{/canvas-file}}
+    </div>
+  </div>
+  <div class="control-group">
+    <label class="control-label" for="inputTitle">Title</label>
+    <div class="controls">
+      {{view Ember.TextField valueBinding=title id="inputTitle"}}
+    </div>
+  </div>
+  <div class="control-group">
+    <label class="control-label" for="textareaDescription">Description</label>
+    <div class="controls">
+      {{view Ember.TextArea valueBinding=description}}
+    </div>
+  </div>

@@ -1,5 +1,5 @@
 {
-  "name": "ember-app-kit",
+  "name": "ember-crud-app",
   "dependencies": {
     "ember": "http://builds.emberjs.com/stable/ember.js",
     "ember-prod": "http://builds.emberjs.com/stable/ember.prod.js",

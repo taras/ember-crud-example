@@ -1,0 +1,18 @@
+<div class="container-fluid">
+  <div class="row-fluid preview">
+    <div class="span4">
+      <img {{bindAttr src=image}} class="thumbnail" />
+    </div>
+    <div class="span8">
+      <div class="container-fluid">
+        <div class="row-fluid">
+          <h2>{{title}}</h2>
+          <p>{{description}}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row-fluid">
+    {{outlet}}
+  </div>
+</div>  

@@ -1,0 +1,10 @@
+<form class="form-horizontal">
+  <fieldset>
+    <legend>New photo</legend>
+    {{partial 'photo/form'}}
+  </fieldset>
+</form>
+<div class="btn-group">
+  <button class="btn btn-large btn-primary" {{action 'create' content}}>Create</button>
+  <button class="btn btn-large btn-danger" {{action 'cancel' content}}>Cancel</button>
+</div>

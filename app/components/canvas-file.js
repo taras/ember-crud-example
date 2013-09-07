@@ -1,3 +1,5 @@
+/* global FileReader: false */
+
 var CanvasFileComponent = Ember.Component.extend({
   actions: {
     start: function() {

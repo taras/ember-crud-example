@@ -1,6 +1,6 @@
 import LocalStorage from 'ember-crud-example/utils/local-storage';
 
-export default {
+var initializer = {
   name: "storageInjections",
   initialize: function( container, application ) {
     application.register( 'storage:main', LocalStorage );
@@ -10,3 +10,5 @@ export default {
     application.inject( 'controller', 'storage', 'storage:main' );
   }
 };
+
+export default initializer;

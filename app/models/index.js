@@ -6,20 +6,14 @@ var Model = Ember.Object.extend( Ember.Copyable, {
   },
   serialize: function() {
     throw new Error(Ember.String.fmt("%@ has to implement serialize() method which is required to convert it to JSON.", [this]));
-  }
-});
-
-Model.reopenClass({
-  // TODO: find out how to lookup things without using __container__
-  find: function( id ) {
-    var container = App.__container__;
-    var storage = container.lookup( 'storage:main' );
-    return storage.read( this.toString(), id );
   },
-  findAll: function() {
-    var container = App.__container__;
-    var storage = container.lookup( 'storage:main' );
-    return storage.findAll( this.toString() );
+  /**
+   * String name of the storage key for this model.
+   * This is only necessary because Ember has a bug that prevents proper class inspection when using modules
+   * TODO: convert Model to a class and remove storageKey after Ember class inspection is fixed.
+   */
+  storageKey: function() {
+    throw new Error(Ember.String.fmt("%@ has to implement storageKey property or method", [this]));    
   }
 });
 

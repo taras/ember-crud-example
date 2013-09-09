@@ -1,7 +1,7 @@
 {{#if isNewOpen}}
   {{outlet}}
 {{else}}
-  <button class="btn btn-large btn-primary mbl pull-right" {{action 'goToNewPhoto'}}>Add a photo</button>
+  <button class="btn btn-large btn-primary new" {{action 'goToNewPhoto'}}>New photo</button>
   <table class="table table-striped">
     <tbody>
     <tr>
@@ -16,8 +16,8 @@
         <td {{action 'goToPhoto' this}}>{{title}}</td>
         <td {{action 'goToPhoto' this}}>{{description}}</td>
         <td>
-          <i class="icon-edit-sign" {{action 'edit' this}}></i>
-          <i class="icon-remove-sign" {{action 'remove' this}}></i>
+          <span class="edit glyphicon glyphicon-edit" {{action 'edit' this}}></span>
+          <span class="remove glyphicon glyphicon-remove-circle" {{action 'remove' this}}></span>
         </td>
       </tr>
     {{/each}}

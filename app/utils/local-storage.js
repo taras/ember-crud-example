@@ -5,11 +5,12 @@ import guid from 'ember-crud-example/utils/guid';
 
 var LocalStorage = Ember.Object.extend({
   getKey: function( type ) {
-    return type.toString();
+    return type.storageKey;
   },
   create: function( model ) {
     var type, existing;
-    type = model.get('storageKey');
+
+    type = model.constructor;
     existing = this.findAll( type );
     existing.push( model );
     this.put( type, existing );
@@ -22,10 +23,10 @@ var LocalStorage = Ember.Object.extend({
     });
   },
   update: function( model ) {
-    var type, models, updated, updatedModels;
-    type = model.get('storageKey');
+    var type, models, updated = false, updatedModels;
+
+    type = model.constructor;
     models = this.findAll( type );
-    updated = false;
     updatedModels = models.map( function( item ) {
       if ( item.get('guid') === model.get('guid') ) {
         updated = true;
@@ -39,15 +40,13 @@ var LocalStorage = Ember.Object.extend({
   },
   remove: function( model ) {
     // TODO: this needs to be looked over
-    var 
-      filtered = [],
-      all = [],
-      type, guid;
+    var type, filtered = [], all = [], guid;
+    debugger;
+    type = model.constructor;
     if ( model ) {
-      type = model.get('storageKey');
-      all = this.findAll( type );
       guid = model.get('guid');
       if ( guid ) {
+        all = this.findAll( type );
         filtered = all.filter( function( item ) {
           return item.get('guid') !== guid;
         });
@@ -57,47 +56,38 @@ var LocalStorage = Ember.Object.extend({
     return filtered.length !== all.length;
   },
   find: function( type, id ) {
-    this.read.apply( arguments );
+    return Em.run( this, 'read', type, id );
   },
   findAll: function( type ) {
     return this.lazyLoadCache( type );
   },
   put: function( type, models ) {
-    var key, camelized, objects;
+    var key, objects;
 
     key = this.getKey( type );
-    camelized = type.toString().camelize();
-    this.cache.set( camelized, models );
+    this.cache.set( key, models );
     objects = models.map(function(item){
       return item.serialize();
     });
     localStorage.setItem( key, JSON.stringify( objects ) );
   },
   lazyLoadCache: function( type ) {
-    var 
-      typeClass = null,
-      camelized, key, all;
-    // normalize the type arg
-    if ( Em.typeOf( type ) === 'string' ) {
-      typeClass = Ember.get(type);
-    } else {
-      typeClass = type;
-      type = type.toString();
-    }
-    camelized = type.camelize();
+    var  key, all;
+
+    key = this.getKey( type );
     // cache property doesn't exist, let's create it
-    if ( Em.isNone( this.cache.get( camelized ) ) ) {
-      key = this.getKey( type );
-      all = Em.A();
+    if ( Em.isNone( this.cache.get( key ) ) ) {
+      // check if localStorage has an entry for this type
       if ( localStorage.hasOwnProperty( key ) ) {
+        // get all of the items for this type and convert JSON objects
         all = JSON.parse( localStorage.getItem( key ) );
         all = Em.A(all).map(function(item){
-          return Em.run( typeClass, 'create', item );
+          return Em.run( type, 'create', item );
         });
       }
-      this.cache.set( camelized, all );
+      this.cache.set( key, all );
     }
-    return this.cache.get( camelized );
+    return this.cache.get( key );
   }
 });
 

@@ -20,8 +20,11 @@ var Photo = Model.extend({
   },
   serialize: function() {
     return this.getProperties([ "guid", "image", "title", "description" ]);
-  },
-  storageKey: 'photo'  
+  }
+});
+
+Photo.reopenClass({
+  storageKey: 'photo'
 });
 
 export default Photo;

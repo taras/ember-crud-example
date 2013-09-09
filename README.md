@@ -8,6 +8,7 @@ I created this app to show how one could create an Ember.js app without using Em
 
 - ✓ Use Ember App Kit
 - ✓ Basic CRUD
+- ✓ HTML5 localStorage
 - ✓ Imaging uploading
 - ✓ Item list
 - ✗ Tests
@@ -24,4 +25,4 @@ I created this app to show how one could create an Ember.js app without using Em
 
 **What else would you like to see here?**
 
-If you get more advanced than this, then you should probably use Ember Data.
+___If you get more advanced than this, then you should probably use Ember Data.___

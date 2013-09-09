@@ -2,7 +2,7 @@ document.write('<div id="ember-testing-container"><div id="ember-testing"></div>
 
 Ember.testing = true;
 
-var App = requireModule('appkit/app');
+var App = requireModule('ember-crud-example/app');
 
 App.rootElement = '#ember-testing';
 App.setupForTesting();

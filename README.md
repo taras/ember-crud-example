@@ -11,7 +11,7 @@ I created this app to show how one could create an Ember.js app without using Em
 - ✓ HTML5 localStorage
 - ✓ Imaging uploading
 - ✓ Item list
-- ✗ Tests
+- ✓ Tests
 
 ### Details
 

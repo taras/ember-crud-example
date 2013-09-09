@@ -1,8 +1,6 @@
 import Model from 'ember-crud-example/models/index';
-import guid from 'ember-crud-example/utils/guid';
 
 var Photo = Model.extend({
-  guid: null,
   image: null,
   title: '',
   description: '',
@@ -13,11 +11,6 @@ var Photo = Model.extend({
       return this.get('image');
     }
   }.property( 'image' ),
-  init: function() {
-    if ( Ember.isNone( this.get( 'guid' ) ) ) {
-      this.set( 'guid', guid() );
-    }
-  },
   serialize: function() {
     return this.getProperties([ "guid", "image", "title", "description" ]);
   }

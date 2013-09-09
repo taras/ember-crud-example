@@ -70,23 +70,32 @@ var LocalStorage = Ember.Object.extend({
     });
     localStorage.setItem( key, JSON.stringify( objects ) );
   },
+  refresh: function( type ) { 
+    return this.lazyLoadCache( type );
+  },
   lazyLoadCache: function( type ) {
-    var  key, all;
+    var  key, all, cacheObj;
 
-    key = this.getKey( type );
+    key = this.getKey(type);
     // cache property doesn't exist, let's create it
-    if ( Em.isNone( this.cache.get( key ) ) ) {
+    if (Em.isNone(this.cache.get(key))) {
       // check if localStorage has an entry for this type
-      if ( localStorage.hasOwnProperty( key ) ) {
-        // get all of the items for this type and convert JSON objects
-        all = JSON.parse( localStorage.getItem( key ) );
-        all = Em.A(all).map(function(item){
-          return Em.run( type, 'create', item );
-        });
-      }
-      this.cache.set( key, all );
+      cacheObj = Em.run(Em.Object, 'create', {});
+      Em.run( this.cache, 'set', key, cacheObj );
     }
-    return this.cache.get( key );
+    if (localStorage.hasOwnProperty(key)) {
+      // get all of the items for this type and convert JSON objects
+      all = JSON.parse( localStorage.getItem( key ) );
+      all = Em.A(all).map(function(item){
+        return Em.run( type, 'create', item );
+      });
+    }
+    Em.run(this.cache, 'set', key, all);
+    all = this.cache.get(key);
+    if ( typeof all === 'undefined' ) {
+      all = [];
+    }
+    return all;
   }
 });
 

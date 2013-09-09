@@ -1,12 +1,17 @@
 import App from 'ember-crud-example/app';
+import guid from 'ember-crud-example/utils/guid';
 
 var Model = Ember.Object.extend( Ember.Copyable, {
   init: function() {
-    if (Em.isNone(this.get('storageKey'))) {
+    if (Em.isNone(this.constructor.storageKey)) {
       throw new Error(Ember.String.fmt("%@ has to implement storageKey property or method", [this]));
     }
+    if (Em.isNone(this.get('guid'))) {
+      this.set( 'guid', guid() );
+    }    
     this._super();
   },
+  guid: null,  
   copy: function() {
     return Em.run( this.constructor, 'create', this.serialize() );
   },

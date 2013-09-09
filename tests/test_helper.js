@@ -1,3 +1,5 @@
+/* global localStorage: false */
+
 document.write('<div id="ember-testing-container"><div id="ember-testing"></div></div>');
 
 Ember.testing = true;
@@ -24,3 +26,7 @@ Ember.Container.prototype.stub = function(fullName, instance) {
   instance.destroy = instance.destroy || function() {};
   this.cache.dict[fullName] = instance;
 };
+
+function deletePhotos() {
+	delete localStorage[ 'photo' ];
+}

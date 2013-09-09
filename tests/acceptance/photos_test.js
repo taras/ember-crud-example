@@ -1,13 +1,13 @@
 import App from 'ember-crud-example/app';
 
-module("Acceptances - Index", {
+module("Acceptances - Photos", {
   setup: function(){
     App.reset();
   }
 });
 
 test("index renders", function(){
-  visit('/').then(function(){
+  visit('/photos').then(function(){
     ok(exists(".btn.new:contains('New photo')"));
   });
 });

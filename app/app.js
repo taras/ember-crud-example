@@ -9,7 +9,6 @@ var App = Ember.Application.create({
   LOG_ACTIVE_GENERATION: true,
   LOG_VIEW_LOOKUPS: true,
   rootElement: "#ember-crud-example",
-  localStorageKey: "ember-crud-example",
   modulePrefix: 'ember-crud-example', 
   Resolver: Resolver
 });

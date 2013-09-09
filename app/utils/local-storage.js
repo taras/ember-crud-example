@@ -41,7 +41,6 @@ var LocalStorage = Ember.Object.extend({
   remove: function( model ) {
     // TODO: this needs to be looked over
     var type, filtered = [], all = [], guid;
-    debugger;
     type = model.constructor;
     if ( model ) {
       guid = model.get('guid');

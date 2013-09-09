@@ -58,22 +58,19 @@ var LocalStorage = Ember.Object.extend({
     return Em.run( this, 'read', type, id );
   },
   findAll: function( type ) {
-    return this.lazyLoadCache( type );
+    return this.refresh( type );
   },
   put: function( type, models ) {
     var key, objects;
 
     key = this.getKey( type );
-    this.cache.set( key, models );
+    Em.run(this.cache, 'set', key, models);
     objects = models.map(function(item){
       return item.serialize();
     });
     localStorage.setItem( key, JSON.stringify( objects ) );
   },
   refresh: function( type ) { 
-    return this.lazyLoadCache( type );
-  },
-  lazyLoadCache: function( type ) {
     var  key, all, cacheObj;
 
     key = this.getKey(type);

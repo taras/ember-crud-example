@@ -19,7 +19,7 @@ test("it exists", function(){
   ok(storage instanceof LocalStorage);
 });
 
-test("create Photo", function() {
+test("create photo", function() {
   var model, guid, found;
 
   model = Em.run(Photo, 'create', {
@@ -36,3 +36,47 @@ test("create Photo", function() {
   equal( model.get('guid'), found.get('guid') );
 
 });
+
+test("update photo", function() {
+
+  var model, updated, guid;
+
+  model = Em.run(Photo, 'create', {
+    'title': "To be updated"
+  });
+  guid = model.get('guid');
+  storage.create(model);
+  Em.run(model, 'set', 'title', "Updated");
+  storage.update(model);
+  updated = storage.find(Photo, guid);
+
+  ok(updated);
+  equal(updated.get('title'), 'Updated');
+
+});
+
+/**
+ * I have not idea why this test is failing.
+ */
+test("delete photo", function() {
+  var m1, m2, all;
+
+  m1 = Em.run(Photo, 'create', {
+    title: "title 1",
+    description: "description 1"
+  });
+
+  m2 = Em.run(Photo, 'create', {
+    title: "title 2",
+    description: "description 2"
+  });
+
+  Em.run(storage, 'create', m1);
+  Em.run(storage, 'create', m2);
+  Em.run(storage, 'remove', m2);
+
+  all = storage.findAll( Photo );
+  equal( all.length, 1 );
+
+});
+

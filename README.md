@@ -6,21 +6,21 @@ I created this app to show how one could create an Ember.js app without using Em
 
 ### Foundation
 
-- [x] Use Ember App Kit
-- [x] Basic CRUD
-- [x] Imaging uploading
-- [x] Item list
-- [] Tests
+- ✓ Use Ember App Kit
+- ✓ Basic CRUD
+- ✓ Imaging uploading
+- ✓ Item list
+- ✗ Tests
 
 ### Details
 
-- [] Form verification
-- [] Breadcrumbs
-- [] Preloading data from remote JSON
+- ✗ Form verification
+- ✗ Breadcrumbs
+- ✗ Preloading data from remote JSON
 
 ### Advanced
 
-- [] Object relationships
+- ✗ Object relationships
 
 **What else would you like to see here?**
 

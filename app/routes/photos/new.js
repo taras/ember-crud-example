@@ -2,9 +2,11 @@ import Photo from 'ember-crud-example/models/photo';
 
 var PhotosNewRoute = Ember.Route.extend({
   beforeModel: function() {
+    // 
     this.controllerFor( 'photos' ).set( 'isNewOpen', true );
   },
   model: function() {
+    // provide a new photo to the template
     return Photo.create({});
   },
   setupController: function( controller, model ) {

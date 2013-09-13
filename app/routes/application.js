@@ -23,7 +23,7 @@ var ApplicationRoute = Ember.Route.extend({
       this.storage.remove( model );
     },
     cancel: function( model ) {
-      Ember.destroy( model );
+      Ember.run( model, "destroy" );
       this.storage.refresh(Photo);
       return this.goToPhotos();
     },

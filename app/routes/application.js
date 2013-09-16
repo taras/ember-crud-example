@@ -3,21 +3,21 @@ import Photo from 'ember-crud-example/models/photo';
 var ApplicationRoute = Ember.Route.extend({
   actions: {
     goToNewPhoto: function () {
-      return this.transitionTo( 'photos.new' );
+      this.transitionTo( 'photo.new' );
     },
     goToPhoto: function( model ) {
-      return this.transitionTo( 'photo', model );
+      this.transitionTo( 'photo', model );
     },
     edit: function( model ) {
-      return this.transitionTo( 'photo.edit', model.copy() );
+      this.transitionTo( 'photo.edit', model.copy() );
     },
     create: function( model ) {
       this.storage.create( model );
-      return this.goToPhotos();
+      this.transitionTo( 'photos' );      
     },
     update: function( model ) {
       this.storage.update( model );
-      return this.goToPhotos();
+      this.transitionTo( 'photos' );
     },
     remove: function( model ) {
       this.storage.remove( model );
@@ -25,21 +25,8 @@ var ApplicationRoute = Ember.Route.extend({
     cancel: function( model ) {
       Ember.run( model, "destroy" );
       this.storage.refresh(Photo);
-      return this.goToPhotos();
-    },
-    /**
-     * TODO: look into components events only pass 1 arument
-     */
-    didLoadFile: function( args ) {
-      var
-        src = args[ 0 ],
-        model = args[ 1 ];
-      model.set( 'image', src );
+      this.transitionTo( 'photos' );      
     }
-  },
-  goToPhotos: function() {
-    this.controllerFor( 'photos' ).set( 'isNewOpen', false );
-    return this.transitionTo( 'photos' );
   }
 });
 

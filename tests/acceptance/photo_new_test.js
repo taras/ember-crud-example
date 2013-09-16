@@ -12,7 +12,7 @@ module("Acceptances - Photos New", {
 });
 
 test("renders", function(){
-  visit('/photos/new').then(function(){
+  visit('/photo/new').then(function(){
     ok(exists("legend:contains('New photo')"));
     ok(exists("button:contains('Create')"));
   });

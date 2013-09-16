@@ -5,8 +5,8 @@
     {{partial 'photo/form'}}
   </fieldset>
 </form>
-{{/with}}
 <div class="btn-group">
-  <button class="btn btn-large btn-primary" {{action 'update' controllers.photo.content}}>Update</button>
-  <button class="btn btn-large btn-danger" {{action 'cancel' controllers.photo.content}}>Cancel</button>
+  <button class="btn btn-large btn-primary" {{action 'update' this}}>Update</button>
+  <button class="btn btn-large btn-danger" {{action 'cancel' this}}>Cancel</button>
 </div>
+{{/with}}

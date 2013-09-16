@@ -1,12 +1,12 @@
-import New from 'ember-crud-example/routes/photos/new';
 import App from 'ember-crud-example/app';
+import New from 'ember-crud-example/routes/photo/new';
 import LocalStorage from 'ember-crud-example/utils/local-storage';
 
 var route;
 
 module("Unit - PhotosNewRoute", {
   setup: function(){
-    route = App.__container__.lookup('route:photos.new');
+    route = App.__container__.lookup('route:photo.new');
   }
 });
 

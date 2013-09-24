@@ -7,9 +7,9 @@
     <th>Description</th>
     <th>Actions</th>
   </tr>
-  {{#each content}}
+  {{#each}}
     <tr>
-      <td {{action 'goToPhoto' this}}><img class="thumbnail" {{bindAttr src=thumbnail}} /></td>
+      <td {{action 'goToPhoto' this}}><img class="thumbnail" {{bind-attr src=thumbnail}} /></td>
       <td {{action 'goToPhoto' this}}>{{title}}</td>
       <td {{action 'goToPhoto' this}}>{{description}}</td>
       <td>

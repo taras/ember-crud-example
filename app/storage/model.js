@@ -1,13 +1,8 @@
 import App from 'ember-crud-example/app';
 import guid from 'ember-crud-example/utils/guid';
+import Storable from 'ember-crud-example/storage/mixins/storable';
 
-/**
- * Ember.js models are just objects. 
- * I find it confusing that Ember.js refers to
- * models as models even though they're just objects. 
- * I'm defining the Model class to use as base for other models.
- */
-var Model = Ember.Object.extend( Ember.Copyable, {
+var Model = Ember.Object.extend( [ Ember.Copyable, Storable ], {
   init: function() {
     if (Em.isNone(this.constructor.storageKey)) {
       throw new Error(Ember.String.fmt("%@ has to implement storageKey property or method", [this]));
@@ -15,7 +10,7 @@ var Model = Ember.Object.extend( Ember.Copyable, {
     if (Em.isNone(this.get('guid'))) {
       // guid is null when item is being created
       this.set( 'guid', guid() );
-    }    
+    }
     this._super();
   },
   // default guid
@@ -34,8 +29,14 @@ Model.reopenClass({
    * String name of the storage key for this model.
    * This is only necessary because Ember has a bug that prevents proper class inspection when using modules
    * TODO: convert Model to a class and remove storageKey after Ember class inspection is fixed.
+   * @type {string}
    */
-  storageKey: null
+  storageKey: null,
+  /**
+   * Index key for this model
+   * @type {String}
+   */
+  indexKey: 'guid'
 });
 
 export default Model;

@@ -1,6 +1,6 @@
 import Resolver from 'resolver';
 import registerComponents from 'ember-crud-example/utils/register_components';
-import StorageAdapter from 'ember-crud-example/adapters/storage';
+import Storage from 'ember-crud-example/storage/main';
 
 var App = Ember.Application.extend({
   LOG_ACTIVE_GENERATION: true,
@@ -23,7 +23,7 @@ App.initializer({
 App.initializer({
   name: "Inject Storage",
   initialize: function( container, application ) {
-    application.register( 'storage:main', StorageAdapter );
+    application.register( 'storage:main', Storage );
     // register singleton instance cache object used for binding
     application.inject( 'route', 'storage', 'storage:main' );
     // inject cache into storage

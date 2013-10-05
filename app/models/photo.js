@@ -1,4 +1,4 @@
-import Model from 'ember-crud-example/models/index';
+import Model from 'ember-crud-example/storage/model';
 
 var Photo = Model.extend({
   image: null,

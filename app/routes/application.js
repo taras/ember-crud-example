@@ -1,4 +1,5 @@
 import Photo from 'ember-crud-example/models/photo';
+import App from 'ember-crud-example/app';
 
 var ApplicationRoute = Ember.Route.extend({
   actions: {
@@ -24,13 +25,12 @@ var ApplicationRoute = Ember.Route.extend({
     },
     cancel: function( model ) {
       Ember.run( model, "destroy" );
-      this.storage.refresh(Photo);
       this.transitionTo( 'photos' );      
     }
   },
   model: function() {
     return Ember.RSVP.hash({
-      storage: this.storage.load()
+      storage: this.storage.load({dbName: App.get('modulePrefix')})
     });
   }
 });

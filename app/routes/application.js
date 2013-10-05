@@ -27,6 +27,11 @@ var ApplicationRoute = Ember.Route.extend({
       this.storage.refresh(Photo);
       this.transitionTo( 'photos' );      
     }
+  },
+  model: function() {
+    return Ember.RSVP.hash({
+      storage: this.storage.load()
+    });
   }
 });
 

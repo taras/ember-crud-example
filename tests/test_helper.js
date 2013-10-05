@@ -1,14 +1,9 @@
-/* global localStorage: false */
-
 document.write('<div id="ember-testing-container"><div id="ember-testing"></div></div>');
 
 Ember.testing = true;
 
-var App = requireModule('ember-crud-example/app');
-
-App.rootElement = '#ember-testing';
-App.setupForTesting();
-App.injectTestHelpers();
+window.startApp          = require('ember-crud-example/tests/helpers/start_app');
+window.isolatedContainer = require('ember-crud-example/tests/helpers/isolated_container');
 
 function exists(selector) {
   return !!find(selector).length;
@@ -21,12 +16,3 @@ function equal(actual, expected, message) {
 
 window.exists = exists;
 window.equal = equal;
-
-Ember.Container.prototype.stub = function(fullName, instance) {
-  instance.destroy = instance.destroy || function() {};
-  this.cache.dict[fullName] = instance;
-};
-
-function deletePhotos() {
-	delete localStorage[ 'photo' ];
-}

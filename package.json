@@ -2,7 +2,7 @@
   "name": "ember-crud-example",
   "namespace": "ember-crud-example",
   "version": "0.0.0",
-  "main": "index.js",
+  "private": true,
   "directories": {
     "doc": "doc",
     "test": "test"
@@ -32,7 +32,7 @@
     "grunt-usemin": "~0.1.12",
     "grunt-contrib-uglify": "~0.2.2",
     "grunt-rev": "~0.1.0",
-    "grunt-ember-templates": "~>0.4.13",
+    "grunt-ember-templates": "~0.4.15",
     "karma": "~0.9.4",
     "grunt-karma": "~0.5",
     "karma-qunit": "~0.0.3",
@@ -40,8 +40,10 @@
     "karma-phantomjs-launcher": "~0.0.2",
     "lockfile": "~>0.3.0",
     "grunt-concat-sourcemap": "~0.3.0",
+    "grunt-contrib-cssmin": "~0.6.1",
+    "grunt-concurrent": "~0.3.1",
     "grunt-dom-munger": "~2.0.1",
-    "grunt-contrib-less": "~0.7.0"
+    "load-grunt-config": "~0.5.0"
   },
   "dependencies": {
     "loom": "~2.0.0",

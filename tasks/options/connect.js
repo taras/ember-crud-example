@@ -1,6 +1,7 @@
 var lockFile = require('lockfile'),
     fs = require('fs'),
-    url = require('url');
+    url = require('url'),
+    Helpers = require('../helpers');
 
 module.exports = {
   server: {
@@ -40,8 +41,8 @@ function wildcardResponseIsValid(request) {
       extension   = urlSegments[urlSegments.length-1];
   return (
     ['GET', 'HEAD'].indexOf(request.method.toUpperCase()) > -1 &&
-    (urlSegments.length == 1 || extension.indexOf('htm') == 0 || extension.length > 5)
-  )
+    (urlSegments.length === 1 || extension.indexOf('htm') === 0 || extension.length > 5)
+  );
 }
 
 function buildWildcardMiddleware(options) {
@@ -52,20 +53,27 @@ function buildWildcardMiddleware(options) {
         wildcardPath = options.base + "/" + wildcard;
 
     fs.readFile(wildcardPath, function(err, data){
-      if (err) { return next('ENOENT' == err.code ? null : err); }
+      if (err) { return next('ENOENT' === err.code ? null : err); }
 
       response.writeHead(200, { 'Content-Type': 'text/html' });
       response.end(data);
     });
-  }
+  };
 }
 
 function middleware(connect, options) {
-  return [
+  var result = [
     lock,
     connect['static'](options.base),
     connect.directory(options.base),
     // Remove this middleware to disable catch-all routing.
     buildWildcardMiddleware(options)
   ];
+
+  // Add livereload middlware after lock middleware if enabled
+  if (Helpers.isPackageAvailable("connect-livereload")) {
+    result.splice(1,0, require("connect-livereload")());
+  }
+
+  return result;
 }

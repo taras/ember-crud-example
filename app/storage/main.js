@@ -1,7 +1,5 @@
 var EIDB = window.EIDB;
 
-EIDB.ERROR_LOGGING = true;
-
 var Storage = Ember.Object.extend({
   /**
    * Settings object used for configuration of the database
@@ -33,8 +31,18 @@ var Storage = Ember.Object.extend({
       // TODO: handle errors 
     });
   },
+  /** 
+   * Store a model in the database
+   * @param  {[type]} model
+   * @return {[type]}
+   */
   create: function(model) {
-    return this.local.add(model.storageKey, model.get(model.indexKey), model.serialize());
+    var 
+      storeName = model.constructor.storageKey, 
+      indexKey  = model.constructor.indexKey, 
+      dbName    = this.get('settings.dbName');    
+    //return this.local.add(model.storageKey, model.get(model.indexKey), model.serialize());
+    return EIDB.addRecord(dbName, storeName, model.serialize(), model.get(indexKey));
   },
   read: function(storageKey, id) {
     return this.local.get(storageKey, id);
@@ -59,7 +67,14 @@ var Storage = Ember.Object.extend({
     if (typeof range === 'undefined') {
       range = [0, 10];
     }
-    return this.getObjectStoreFor(modelClass).getAll(range, direction);
+    var promise = this.getObjectStoreFor(modelClass)
+      .then(function(objectStore){
+        return objectStore.getAll(range, direction);
+      })
+      .then(null, function(error){
+        console.log(error);
+      });
+    return promise;
   },
   /**
    * Return promise that will resolve to the found value
@@ -78,19 +93,22 @@ var Storage = Ember.Object.extend({
     return EIDB.find(this.get('settings.dbName'), modelClass.storageKey, query);
   },
   /** 
-   * Return an object store, create it first if it doesn't exist.
+   * Return a promise that will resolve to an objectStore. 
+   * Creates an object store if it doesn't already exist.
    * @param  {class} modelClass
    * @return {IDBObjectStore}
    */
   getObjectStoreFor: function(modelClass) {
     Ember.assert("Storage expects modelClass to be a class that extends Model", Ember.typeOf(modelClass) === 'class');    
-    var objectStore, db = this.local, name = modelClass.storageKey, indexKey = modelClass.indexKey;
-    if ( db.hasObjectStore(name) ) {
-      objectStore = db.objectStore(name);
-    } else {
-      objectStore = db.createObjectStore(name, { keyPath: indexKey });
-    }
-    return objectStore;
+    var that = this, objectStore, db = this.local, storeName = modelClass.storageKey, 
+    indexKey = modelClass.indexKey, dbName = this.get('settings.dbName');
+    return new Ember.RSVP.Promise(function(resolve, reject){
+      if ( db.hasObjectStore(storeName) ) {
+        resolve(db.objectStore(storeName));
+      } else {
+        resolve(EIDB.createObjectStore(dbName, storeName, { keyPath: indexKey }));
+      }      
+    });
   }
 });
 

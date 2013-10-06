@@ -30,7 +30,6 @@ var ApplicationRoute = Ember.Route.extend({
     }
   },
   model: function() {
-    debugger;
     return Ember.RSVP.hash({
       storage: this.storage.load({dbName: App.get('modulePrefix')})
     });

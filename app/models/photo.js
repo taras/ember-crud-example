@@ -21,7 +21,7 @@ var Photo = Model.extend({
 
 // set storage key for this class of models
 Photo.reopenClass({
-  storageKey: 'photo'
+  storageKey: 'photos'
 });
 
 export default Photo;

@@ -10,25 +10,57 @@ var Storage = Ember.Object.extend({
      * Database name used by this application
      * @type {string}
      */
-    dbName: null
+    dbName: null,
+    /**
+     * Array of model classes that you would like to register with the database.
+     * Necessary to make sure that an object store exists for every model.
+     * @type {Array}
+     */
+    models: []
   },
   // in-browser storage where data will be persisted
-  local: null, 
+  db: null, 
   // load will return a promise that will resolve once all of the persistance related loading is complete
   load: function(settings) {
     Ember.assert('Storage expects settings to be an object.', Ember.typeOf(settings) === 'object');
     Ember.assert('Storage expects dbName property in settings.', Ember.typeOf(settings) && settings.hasOwnProperty('dbName'));
+    Ember.assert('Storage expects an array models property in settings.', settings.hasOwnProperty('models') && Ember.typeOf(settings.models) === 'array');
     this.set('settings', settings);
-    var that = this;
+    var 
+      that = this,
+      dbName = settings.dbName,
+      models = settings.models;
 
+    /**
+     * Load data into *this* instance
+     * @param  {object} data
+     * @return {storage}
+     */
     var populate = function(data){
-      that.reopen(data); // populate our data into local storage
+      that.reopen(data); // populate our data into db storage
+      return that;
+    };
+
+    /**
+     * Create datastore for every model class in global models array
+     * @param  {object} data
+     * @return {object}
+     */
+    var registerModels = function(data) {
+      models.forEach(function(modelClass){
+        var storeName = modelClass.storageKey;
+        if (!data.db.hasObjectStore(storeName)) {
+          EIDB.createObjectStore(dbName, storeName);
+        } 
+      });
+      return data;
     };
 
     // return promise that will be resolved after the persistance layer is setup
     var promise = Ember.RSVP.hash({
-        local: EIDB.open(settings.dbName) // open IndexedDB database
+        db: EIDB.open(settings.dbName) // open IndexedDB database
       })
+      .then(registerModels)
       .then(populate)
       .then(null, handleErrors);
 
@@ -46,17 +78,12 @@ var Storage = Ember.Object.extend({
       storeName   = model.constructor.storageKey,
       modelClass  = model.constructor;
 
-    var addRecord = function() {
-      return EIDB.addRecord(dbName, storeName, model.serialize());
+    var updateModel = function(key){
+      model.set('_key', key);
+      return model;
     };
 
-    var updateModel = function(record){
-      Ember.assert('Storage expects record returned by IndexedDB to be an object.', Ember.typeOf(record) === 'object');
-      return model.setProperties(record);
-    };
-
-    var promise = this.getObjectStoreFor(modelClass)
-      .then(addRecord)
+    var promise = EIDB.addRecord(dbName, storeName, model.serialize())
       .then(updateModel)
       .then(null, handleErrors); 
 
@@ -75,16 +102,11 @@ var Storage = Ember.Object.extend({
       dbName    = this.get('settings.dbName'),
       storeName = modelClass.storageKey;
 
-    var getRecord = function(objectStore){
-      return EIDB.getRecord(dbName, storeName, id);        
-    };
-
     var createModel = function(record){
       return modelClass.create(record);
     };
 
-    var promise = this.getObjectStoreFor(modelClass)
-      .then(getRecord)
+    var promise = EIDB.getRecord(dbName, storeName, id)
       .then(createModel)
       .then(null, handleErrors);
 
@@ -107,12 +129,8 @@ var Storage = Ember.Object.extend({
       return model;
     };
 
-    var updateRecord = function() {
-      EIDB.putRecord(dbName, storeName, model.serialize());
-    };
 
-    var promise = this.getObjectStoreFor(modelClass)
-      .then(updateRecord)
+    var promise = EIDB.putRecord(dbName, storeName, model.serialize())
       .then(returnModel)
       .then(null, handleErrors);
 
@@ -130,17 +148,12 @@ var Storage = Ember.Object.extend({
       storeName   = model.constructor.storageKey,
       modelClass  = model.constructor;
 
-    var deleteRecord = function(){
-      return EIDB.delete(dbName, storeName, model.get('_key'));
-    };
-
     var returnModel = function(record){
       // make sure that the callback returns model and not record
       return model;
     };
 
-    var promise = this.getObjectStoreFor(modelClass)
-      .then(deleteRecord)
+    var promise = EIDB.deleteRecord(dbName, storeName, model.get('_key'))
       .then(returnModel)
       .then(null, handleErrors);
 
@@ -153,17 +166,10 @@ var Storage = Ember.Object.extend({
    * @param  {string} direction ( prev or next )
    * @return {promise} resolves to array of models
    */
-  findAll: function(modelClass, range, direction) {
-    if (typeof direction === 'undefined') {
-      direction = 'next';
-    }
-    if (typeof range === 'undefined') {
-      range = [0, 10];
-    }
-
-    var getAll = function(objectStore){
-      return objectStore.getAll(range, direction);
-    };
+  findAll: function(modelClass, options) {
+    var 
+      dbName = this.get('settings.dbName'),
+      storeName = modelClass.storageKey;
 
     var createModels = function(records) {
       return Em.A(records).map(function(record){
@@ -171,15 +177,14 @@ var Storage = Ember.Object.extend({
       });
     };
 
-    var promise = this.getObjectStoreFor(modelClass)
-      .then(getAll)
+    var promise = EIDB.getAll(dbName, storeName, null, 'prev')
       .then(createModels)
       .then(null, handleErrors);
 
     return promise;
   },
   /**
-   * Return promise that will resolve to the found value
+   * Return promise that will resolve to the found object
    * @param  {class} modelClass
    * @param  {object} query
    * @return {promise} resolves to array of objects
@@ -192,39 +197,24 @@ var Storage = Ember.Object.extend({
       dbName    = this.get('settings.dbName'),
       storeName = modelClass.storageKey;
 
-    var findRecords = function(objectStore) {
-      return EIDB.find(dbName, storeName, query);
-    };
-
     var createModels = function(records) {
       return Em.A(records).map(function(record){
         return modelClass.create(record);
       });
     };
 
-    var promise = this.getObjectStoreFor(modelClass)
-      .then(findRecords)
+    var promise = EIDB.find(dbName, storeName, query)
       .then(createModels)
       .then(null, handleErrors);
 
     return promise;
   },
-  /** 
-   * Return a promise that will resolve to an objectStore. 
-   * Creates an object store if it doesn't already exist.
-   * @param  {class} modelClass
-   * @return {IDBObjectStore}
+  /**
+   * Delete current database
+   * @return {promise}
    */
-  getObjectStoreFor: function(modelClass) {
-    Ember.assert("Storage expects modelClass to be a class that extends Model", Ember.typeOf(modelClass) === 'class');    
-    var that = this, objectStore, db = this.local, storeName = modelClass.storageKey, dbName = this.get('settings.dbName');
-    return new Ember.RSVP.Promise(function(resolve, reject){
-      if ( db.hasObjectStore(storeName) ) {
-        resolve(db.objectStore(storeName));
-      } else {
-        resolve(EIDB.createObjectStore(dbName, storeName));
-      }      
-    });
+  deleteDB: function() {
+    return EIDB.delete(this.get('settings.dbName'));
   }
 });
 

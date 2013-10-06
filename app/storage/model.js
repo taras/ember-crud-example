@@ -31,7 +31,7 @@ Model.reopenClass({
    * TODO: convert Model to a class and remove storageKey after Ember class inspection is fixed.
    * @type {string}
    */
-  storageKey: null,
+  storageKey: null
 });
 
 export default Model;

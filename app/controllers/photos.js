@@ -1,5 +1,3 @@
-var PhotosController = Ember.ArrayController.extend({
-  contentBinding: 'storage.cache.photo'
-});
+var PhotosController = Ember.ArrayController.extend({});
 
 export default PhotosController;

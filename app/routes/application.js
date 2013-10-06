@@ -14,15 +14,14 @@ var ApplicationRoute = Ember.Route.extend({
       this.transitionTo( 'photo.edit', model.copy() );
     },
     create: function( model ) {
-      this.storage.create( model );
-      this.transitionTo( 'photos' );      
+      this.storage.create( model );     
     },
     update: function( model ) {
       this.storage.update( model );
-      this.transitionTo( 'photos' );
     },
-    remove: function( model ) {
-      this.storage.remove( model );
+    "delete": function( model ) {
+      this.storage.delete( model );
+      model.destroy();
     },
     cancel: function( model ) {
       Ember.run( model, "destroy" );
@@ -31,9 +30,17 @@ var ApplicationRoute = Ember.Route.extend({
   },
   model: function() {
     return Ember.RSVP.hash({
-      storage: this.storage.load({dbName: App.get('modulePrefix')})
-    });
+      storage: this.storage.load({
+        dbName: App.get('modulePrefix'),
+        models: [ Photo ]
+      })
+    })
+    .then(reopen);
   }
 });
+
+var reopen = function(data) {
+  App.reopen(data);
+};
 
 export default ApplicationRoute;

@@ -32,11 +32,6 @@ Model.reopenClass({
    * @type {string}
    */
   storageKey: null,
-  /**
-   * Index key for this model
-   * @type {String}
-   */
-  indexKey: 'guid'
 });
 
 export default Model;

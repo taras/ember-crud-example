@@ -1,8 +1,8 @@
 import App from 'ember-crud-example/app';
-import guid from 'ember-crud-example/utils/guid';
+import guid from 'ember-crud-example/storage/utils/guid';
 import Storable from 'ember-crud-example/storage/mixins/storable';
 
-var Model = Ember.Object.extend( [ Ember.Copyable, Storable ], {
+var Model = Ember.Object.extend( Ember.Copyable, Storable, {
   init: function() {
     if (Em.isNone(this.constructor.storageKey)) {
       throw new Error(Ember.String.fmt("%@ has to implement storageKey property or method", [this]));

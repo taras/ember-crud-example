@@ -1,5 +1,6 @@
 import Photo from 'ember-crud-example/models/photo';
-import App from 'ember-crud-example/app';
+
+var App = window.App;
 
 var ApplicationRoute = Ember.Route.extend({
   actions: {
@@ -29,6 +30,7 @@ var ApplicationRoute = Ember.Route.extend({
     }
   },
   model: function() {
+    debugger;
     return Ember.RSVP.hash({
       storage: this.storage.load({dbName: App.get('modulePrefix')})
     });

@@ -1,5 +1,7 @@
 var EIDB = window.EIDB;
 
+EIDB.ERROR_LOGGING = true;
+
 var Storage = Ember.Object.extend({
   /**
    * Settings object used for configuration of the database
@@ -16,8 +18,8 @@ var Storage = Ember.Object.extend({
   local: null, 
   // load will return a promise that will resolve once all of the persistance related loading is complete
   load: function(settings) {
-    Ember.assert('Storage expects settings to be an object.', Ember.typeof(settings) === 'object');
-    Ember.assert('Storage expects dbName property in settings.', Ember.typeof(settings) && settings.hasOwnProperty('dbName'));
+    Ember.assert('Storage expects settings to be an object.', Ember.typeOf(settings) === 'object');
+    Ember.assert('Storage expects dbName property in settings.', Ember.typeOf(settings) && settings.hasOwnProperty('dbName'));
     this.set('settings', settings);
     var that = this;
     // return promise that will be resolved after the persistance layer is setup
@@ -45,35 +47,50 @@ var Storage = Ember.Object.extend({
   },
   /**
    * Return promise that will resolve to found values
-   * @param  {string} storageKey
+   * @param  {class} modelClass
    * @param  {array} range [min, max]
    * @param  {string} direction ( prev or next )
    * @return {promise}
    */
-  findAll: function(storageKey, range, direction) {
+  findAll: function(modelClass, range, direction) {
     if (typeof direction === 'undefined') {
       direction = 'next';
     }
     if (typeof range === 'undefined') {
       range = [0, 10];
     }
-    return this.local.objectStore(storageKey).getAll(range, direction);
+    return this.getObjectStoreFor(modelClass).getAll(range, direction);
   },
   /**
    * Return promise that will resolve to the found value
-   * @param  {Model} type
+   * @param  {Model} modelClass
    * @param  {object} query
    * @return {Promise}
    */
-  find: function(type, query) {
-    Ember.assert('Storage expects type to be a model class. ie Photo', Ember.typeof(type) !== 'class');
+  find: function(modelClass, query) {
+    Ember.assert('Storage expects modelClass to be a model class. ie Photo', Ember.typeOf(modelClass) === 'class');
     if (Ember.typeof(query) === 'number') {
       var id = query;
       query = {};
-      query[type.indexKey] = id;
+      query[modelClass.indexKey] = id;
     }
-    Ember.assert('Storage expects object to be a hash.', Ember.typeof(query) !== 'object');
-    return EIDB.find(this.get('settings.dbName'), type.storageKey, query);
+    Ember.assert('Storage expects object to be a hash.', Ember.typeOf(query) !== 'object');
+    return EIDB.find(this.get('settings.dbName'), modelClass.storageKey, query);
+  },
+  /** 
+   * Return an object store, create it first if it doesn't exist.
+   * @param  {class} modelClass
+   * @return {IDBObjectStore}
+   */
+  getObjectStoreFor: function(modelClass) {
+    Ember.assert("Storage expects modelClass to be a class that extends Model", Ember.typeOf(modelClass) === 'class');    
+    var objectStore, db = this.local, name = modelClass.storageKey, indexKey = modelClass.indexKey;
+    if ( db.hasObjectStore(name) ) {
+      objectStore = db.objectStore(name);
+    } else {
+      objectStore = db.createObjectStore(name, { keyPath: indexKey });
+    }
+    return objectStore;
   }
 });
 

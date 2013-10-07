@@ -34,5 +34,4 @@ Model.reopenClass({
   storageKey: null
 });
 
-export
-default Model;
+export default Model;

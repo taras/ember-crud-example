@@ -222,5 +222,4 @@ var handleErrors = function(errors) {
   // TODO: how do I handle these errors?
 };
 
-export
-default Storage;
+export default Storage;

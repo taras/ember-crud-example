@@ -1,4 +1,4 @@
-import Application from 'appkit/app';
+import Application from 'ember-crud-example/app';
 
 function startApp(attrs) {
   var App;
@@ -7,7 +7,8 @@ function startApp(attrs) {
     // useful Test defaults
     rootElement: '#ember-testing',
     LOG_ACTIVE_GENERATION:false,
-    LOG_VIEW_LOOKUPS: false
+    LOG_VIEW_LOOKUPS: false,
+    dbName: "crud-tests",
   }, attrs); // but you can override;
 
   Ember.run.join(function(){

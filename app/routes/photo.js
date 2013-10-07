@@ -1,9 +1,9 @@
 import Photo from 'ember-crud-example/models/photo';
 
 var PhotoRoute = Ember.Route.extend({
-  model: function( params ) {
-    var promise = this.storage.find(Photo, {guid: params.guid}, true)
-      .then(function(models){
+  model: function(params) {
+    var promise = this.storage.find(Photo, { guid: params.guid }, true)
+      .then(function(models) {
         Ember.assert("PhotoRoute#model expects Storage#find to return an array", Em.typeOf(models) === 'array');
         var model = null;
         // find method will return an array of models, but we need a single model
@@ -14,7 +14,7 @@ var PhotoRoute = Ember.Route.extend({
       });
     return promise;
   },
-  serialize: function( params ) {
+  serialize: function(params) {
     return { guid: params.guid };
   }
 });

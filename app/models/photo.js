@@ -11,11 +11,11 @@ var Photo = Model.extend({
     } else {
       return this.get('image');
     }
-  }.property( 'image' ),
+  }.property('image'),
   // Tells the resistance layer what properties to save to localStorage
   // Ember Data does this for you.
   serialize: function() {
-    return this.getProperties([ "guid", "image", "title", "description" ]);
+    return this.getProperties(["guid", "image", "title", "description"]);
   }
 });
 

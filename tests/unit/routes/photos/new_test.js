@@ -1,12 +1,15 @@
-import App from 'ember-crud-example/app';
 import New from 'ember-crud-example/routes/photo/new';
-import LocalStorage from 'ember-crud-example/utils/local-storage';
+import Storage from 'ember-crud-example/storage/main';
 
 var route;
 
 module("Unit - PhotosNewRoute", {
   setup: function(){
-    route = App.__container__.lookup('route:photo.new');
+    var container = isolatedContainer([
+      'route:photo.new'
+    ]);
+
+    route = container.lookup('route:photo.new');
   }
 });
 
@@ -17,5 +20,5 @@ test("it exists", function(){
 
 test("has storage", function() {
 	ok(route.storage);
-	ok(route.storage instanceof LocalStorage);
+	ok(route.storage instanceof Storage);
 });

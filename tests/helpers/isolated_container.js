@@ -5,7 +5,7 @@ function isolatedContainer(fullNames) {
   var resolver = Resolver.create();
 
   resolver.namespace = {
-    modulePrefix: 'appkit'
+    modulePrefix: 'ember-crud-example'
   };
 
   for (var i = fullNames.length; i > 0; i--) {

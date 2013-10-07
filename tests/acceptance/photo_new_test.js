@@ -1,13 +1,13 @@
-/* global deletePhotos: false */
-
-import App from 'ember-crud-example/app';
+var App;
 
 module("Acceptances - Photos New", {
   setup: function(){
-    App.reset();
+    App = startApp();
   },
   teardown: function() {
-    deletePhotos();
+    debugger;
+    Ember.run( App.storage, 'deleteDB', App.get('dbName') );
+    Ember.run(App, 'destroy');
   }
 });
 

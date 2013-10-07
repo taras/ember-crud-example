@@ -1,11 +1,14 @@
 import Index from 'ember-crud-example/routes/index';
-import App from 'ember-crud-example/app';
 
 var route;
 
 module("Unit - IndexRoute", {
   setup: function(){
-    route = App.__container__.lookup('route:index');
+    var container = isolatedContainer([
+      'route:index'
+    ]);
+
+    route = container.lookup('route:index');
   }
 });
 

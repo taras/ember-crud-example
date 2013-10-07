@@ -1,19 +1,19 @@
 <div class="form-group">
   <label class="control-label col-lg-2" for="imageField">Image</label>
   <div class="col-lg-10">
-    {{#canvas-file width=250 height=250 value=image}}Upload image{{/canvas-file}}
+  {{#canvas-file width=250 height=250 value=image}}Upload image{{/canvas-file}}
   </div>
 </div>
 <div class="form-group">
   <label class="control-label col-lg-2" for="inputTitle">Title</label>
   <div class="col-lg-10">
-    {{view Ember.TextField valueBinding=title id="inputTitle" classNames="form-control"}}
+  {{view Ember.TextField valueBinding=title id="inputTitle" classNames="form-control"}}
   </div>
 </div>
 <div class="form-group">
   <label class="control-label col-lg-2" for="textareaDescription">Description</label>
   <div class="col-lg-10">
-    {{view Ember.TextArea valueBinding=description classNames="form-control" id="textareaDescription"}}
+  {{view Ember.TextArea valueBinding=description classNames="form-control" id="textareaDescription"}}
   </div>
 </div>
 <input type="hidden" {{bind-attr value=guid}} id="guid"/>

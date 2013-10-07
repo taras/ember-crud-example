@@ -12,4 +12,5 @@ var PhotosRoute = Ember.Route.extend({
   }
 });
 
-export default PhotosRoute;
+export
+default PhotosRoute;

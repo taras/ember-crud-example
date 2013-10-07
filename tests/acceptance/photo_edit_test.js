@@ -1,22 +1,21 @@
-/* global deletePhotos: false */
-
-import App from 'ember-crud-example/app';
 import Photo from 'ember-crud-example/models/photo';
+import Storage from 'ember-crud-example/storage/main';
 
-var storage, model, guid;
+var App, model, guid;
 
 module("Acceptances - Photo Edit", {
   setup: function(){
-    App.reset();
-    storage = App.__container__.lookup('storage:main');
+    App = startApp();
     model = Em.run( Photo, 'create', {
       title: "Work in progress",
       description: "This item is incomplete."
     });
-    Em.run( storage, 'create', model );
+    Em.run( App.storage, 'create', model );
   },
   teardown: function() {
-    deletePhotos();
+    debugger;
+    Em.run(App.storage, 'deleteDB', App.get('dbName'));
+    Ember.run(App, 'destroy');
   }
 });
 

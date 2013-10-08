@@ -28,11 +28,11 @@ var ApplicationRoute = Ember.Route.extend({
   },
   model: function() {
     Ember.assert("App expects storage to be present", Ember.typeOf(this.storage) === 'instance');
-    var promise;
+    var promise, that = this;
     Ember.run(function(){
       promise = Ember.RSVP.hash({
-        storage: this.storage.load({
-          dbName: this.settings.db.name,
+        storage: that.storage.load({
+          dbName: that.settings.db.name,
           models: [Photo]
         })
       });

@@ -1,4 +1,4 @@
-var EIDB = window.EIDB;
+var set = Ember.set, EIDB = window.EIDB;
 
 var Storage = Ember.Object.extend({
   /**
@@ -25,11 +25,14 @@ var Storage = Ember.Object.extend({
     Ember.assert('Storage expects settings to be an object.', Ember.typeOf(settings) === 'object');
     Ember.assert('Storage expects dbName property in settings.', Ember.typeOf(settings) && settings.hasOwnProperty('dbName'));
     Ember.assert('Storage expects an array models property in settings.', settings.hasOwnProperty('models') && Ember.typeOf(settings.models) === 'array');
-    this.set('settings', settings);
+
     var
-    that = this,
+      that = this,
       dbName = settings.dbName,
-      models = settings.models;
+      models = settings.models,
+      promise;
+
+    Ember.run(this, 'set', 'settings', settings);
 
     /**
      * Load data into *this* instance
@@ -37,7 +40,7 @@ var Storage = Ember.Object.extend({
      * @return {storage}
      */
     var populate = function(data) {
-      that.reopen(data); // populate our data into db storage
+      that.reopen(data);
       return that;
     };
 
@@ -56,13 +59,15 @@ var Storage = Ember.Object.extend({
       return data;
     };
 
-    // return promise that will be resolved after the persistance layer is setup
-    var promise = Ember.RSVP.hash({
-      db: EIDB.open(settings.dbName) // open IndexedDB database
-    })
-      .then(registerModels)
-      .then(populate)
-      .then(null, handleErrors);
+    Ember.run(function(){
+      // return promise that will be resolved after the persistance layer is setup
+      promise = Ember.RSVP.hash({
+        db: EIDB.open(settings.dbName) // open IndexedDB database
+      })
+        .then(registerModels)
+        .then(populate)
+        .then(null, handleErrors);
+    });
 
     return promise;
   },
@@ -74,18 +79,21 @@ var Storage = Ember.Object.extend({
    */
   create: function(model) {
     var
-    dbName = this.get('settings.dbName'),
+      dbName = this.get('settings.dbName'),
       storeName = model.constructor.storageKey,
-      modelClass = model.constructor;
+      modelClass = model.constructor,
+      promise;
 
     var updateModel = function(key) {
-      model.set('_key', key);
+      set( model, '_key', key );
       return model;
     };
 
-    var promise = EIDB.addRecord(dbName, storeName, model.serialize())
-      .then(updateModel)
-      .then(null, handleErrors);
+    Ember.run(function(){
+      promise = EIDB.addRecord(dbName, storeName, model.serialize())
+        .then(updateModel)
+        .then(null, handleErrors);
+    });
 
     return promise;
   },
@@ -99,16 +107,19 @@ var Storage = Ember.Object.extend({
   read: function(modelClass, id) {
     Ember.assert('Storage expects modelClass parameter to be a class that inherits from Model class.', Ember.typeOf(modelClass) === 'class');
     var
-    dbName = this.get('settings.dbName'),
-      storeName = modelClass.storageKey;
+      dbName = this.get('settings.dbName'),
+      storeName = modelClass.storageKey,
+      promise;
 
     var createModel = function(record) {
       return modelClass.create(record);
     };
 
-    var promise = EIDB.getRecord(dbName, storeName, id)
-      .then(createModel)
-      .then(null, handleErrors);
+    Ember.run(function(){
+      promise = EIDB.getRecord(dbName, storeName, id)
+        .then(createModel)
+        .then(null, handleErrors);
+    });
 
     return promise;
   },
@@ -120,19 +131,21 @@ var Storage = Ember.Object.extend({
   update: function(model) {
     Ember.assert("Storage expects model to have _key property, which identifies this record in IndexedDB.", model && model.get('_key'));
     var
-    dbName = this.get('settings.dbName'),
+      dbName = this.get('settings.dbName'),
       storeName = model.constructor.storageKey,
-      modelClass = model.constructor;
+      modelClass = model.constructor,
+      promise;
 
     var returnModel = function(record) {
       // make sure that the callback returns model and not record
       return model;
     };
 
-
-    var promise = EIDB.putRecord(dbName, storeName, model.serialize())
-      .then(returnModel)
-      .then(null, handleErrors);
+    Ember.run(function(){
+      promise = EIDB.putRecord(dbName, storeName, model.serialize())
+        .then(returnModel)
+        .then(null, handleErrors);
+    });
 
     return promise;
   },
@@ -144,18 +157,21 @@ var Storage = Ember.Object.extend({
   "delete": function(model) {
     Ember.assert("Storage expects model to have _key property, which identifies this record in IndexedDB.", model && model.get('_key'));
     var
-    dbName = this.get('settings.dbName'),
+      dbName = this.get('settings.dbName'),
       storeName = model.constructor.storageKey,
-      modelClass = model.constructor;
+      modelClass = model.constructor,
+      promise;
 
     var returnModel = function(record) {
       // make sure that the callback returns model and not record
       return model;
     };
 
-    var promise = EIDB.deleteRecord(dbName, storeName, model.get('_key'))
-      .then(returnModel)
-      .then(null, handleErrors);
+    Ember.run(function(){
+      promise = EIDB.deleteRecord(dbName, storeName, model.get('_key'))
+        .then(returnModel)
+        .then(null, handleErrors);
+    });
 
     return promise;
   },
@@ -168,8 +184,9 @@ var Storage = Ember.Object.extend({
    */
   findAll: function(modelClass, options) {
     var
-    dbName = this.get('settings.dbName'),
-      storeName = modelClass.storageKey;
+      dbName = this.get('settings.dbName'),
+      storeName = modelClass.storageKey,
+      promise;
 
     var createModels = function(records) {
       return Em.A(records).map(function(record) {
@@ -177,9 +194,11 @@ var Storage = Ember.Object.extend({
       });
     };
 
-    var promise = EIDB.getAll(dbName, storeName, null, 'prev')
-      .then(createModels)
-      .then(null, handleErrors);
+    Ember.run(function(){
+      promise = EIDB.getAll(dbName, storeName, null, 'prev')
+        .then(createModels)
+        .then(null, handleErrors);
+    });
 
     return promise;
   },
@@ -194,8 +213,9 @@ var Storage = Ember.Object.extend({
     Ember.assert('Storage expects object to be a hash.', Ember.typeOf(query) === 'object');
 
     var
-    dbName = this.get('settings.dbName'),
-      storeName = modelClass.storageKey;
+      dbName = this.get('settings.dbName'),
+      storeName = modelClass.storageKey,
+      promise;
 
     var createModels = function(records) {
       return Em.A(records).map(function(record) {
@@ -203,9 +223,11 @@ var Storage = Ember.Object.extend({
       });
     };
 
-    var promise = EIDB.find(dbName, storeName, query)
-      .then(createModels)
-      .then(null, handleErrors);
+    Ember.run(function(){
+      promise = EIDB.find(dbName, storeName, query)
+        .then(createModels)
+        .then(null, handleErrors);
+    });
 
     return promise;
   },

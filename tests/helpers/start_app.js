@@ -8,7 +8,7 @@ function startApp(attrs) {
     rootElement: '#ember-testing',
     LOG_ACTIVE_GENERATION:false,
     LOG_VIEW_LOOKUPS: false,
-    dbName: "crud-tests",
+    dbName: 'crud-testing',
   }, attrs); // but you can override;
 
   Ember.run.join(function(){

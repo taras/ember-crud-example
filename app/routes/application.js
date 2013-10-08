@@ -1,7 +1,5 @@
 import Photo from 'ember-crud-example/models/photo';
 
-var App = window.App;
-
 var ApplicationRoute = Ember.Route.extend({
   actions: {
     goToNewPhoto: function() {
@@ -29,18 +27,21 @@ var ApplicationRoute = Ember.Route.extend({
     }
   },
   model: function() {
-    return Ember.RSVP.hash({
-      storage: this.storage.load({
-        dbName: App.get('dbName'),
-        models: [Photo]
-      })
-    })
-      .then(reopen);
+    Ember.assert("App expects storage to be present", Ember.typeOf(this.storage) === 'instance');
+    var promise;
+    Ember.run(function(){
+      promise = Ember.RSVP.hash({
+        storage: this.storage.load({
+          dbName: this.settings.db.name,
+          models: [Photo]
+        })
+      });
+    });
+    return promise;
+  },
+  afterModel: function(model, transition) {
+    debugger;
   }
 });
-
-var reopen = function(data) {
-  App.reopen(data);
-};
 
 export default ApplicationRoute;

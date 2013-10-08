@@ -9,7 +9,7 @@ var Model = Ember.Object.extend(Ember.Copyable, Storable, {
     }
     if (Em.isNone(this.get('guid'))) {
       // guid is null when item is being created
-      this.set('guid', guid());
+      Ember.run( this, 'set', 'guid', guid() );
     }
     this._super();
   },

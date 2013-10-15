@@ -1,4 +1,7 @@
-var set = Ember.set, EIDB = window.EIDB;
+import EIDB from 'eidb';
+import setup from 'ember-crud-example/storage/setup';
+
+window.EIDB = EIDB;
 
 var Storage = Ember.Object.extend({
   /**
@@ -20,6 +23,9 @@ var Storage = Ember.Object.extend({
   },
   // in-browser storage where data will be persisted
   db: null,
+  init: function() {
+    setup();
+  },
   // load will return a promise that will resolve once all of the persistance related loading is complete
   load: function(settings) {
     Ember.assert('Storage expects settings to be an object.', Ember.typeOf(settings) === 'object');
@@ -32,7 +38,7 @@ var Storage = Ember.Object.extend({
       models = settings.models,
       promise;
 
-    Ember.run(this, 'set', 'settings', settings);
+    this.set( 'settings', settings );
 
     /**
      * Load data into *this* instance
@@ -85,7 +91,7 @@ var Storage = Ember.Object.extend({
       promise;
 
     var updateModel = function(key) {
-      set( model, '_key', key );
+      model.set('_key', key );
       return model;
     };
 

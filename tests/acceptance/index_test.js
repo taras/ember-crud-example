@@ -9,14 +9,9 @@ module('Acceptances - Index', {
   }
 });
 
-test('index renders', function(){
+test("index renders", function(){
   expect(1);
-
-  visit('/').then(function(){
-    var title = find('h2#title');
-    var list = find('ul li');
-
-    equal(title.text(), 'Welcome to Ember.js');
-  });   
-
+  visit('/photos').then(function(){
+    equal(exists(".btn.new:contains('New photo')"), true);
+  });
 });

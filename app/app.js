@@ -23,15 +23,6 @@ App.initializer({
 });
 
 App.initializer({
-  name: "Inject Settings",
-  initialize: function( container, application ) {
-    application.register( 'settings:main', Settings );
-    application.inject( 'route', 'settings', 'settings:main' );
-    application.inject( 'controller', 'settings', 'settings:main' );
-  }
-});
-
-App.initializer({
   name: "Inject Storage",
   initialize: function( container, application ) {
     application.register( 'storage:main', Storage );

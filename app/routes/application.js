@@ -40,7 +40,6 @@ var ApplicationRoute = Ember.Route.extend({
     return promise;
   },
   afterModel: function(model, transition) {
-    debugger;
   }
 });
 

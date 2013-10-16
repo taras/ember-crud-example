@@ -1,5 +1,5 @@
 var IndexRoute = Ember.Route.extend({
-  beforeModel: function( transition ) {
+  redirect: function() {
     // redirect root to photos
     this.transitionTo( 'photos' );
   }

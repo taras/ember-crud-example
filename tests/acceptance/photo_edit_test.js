@@ -1,44 +1,43 @@
-/* global deletePhotos: false */
-
-import App from 'ember-crud-example/app';
 import Photo from 'ember-crud-example/models/photo';
 
-var storage, model, guid;
+var pouch, model, id, App;
 
 module("Acceptances - Photo Edit", {
   setup: function(){
-    App.reset();
-    storage = App.__container__.lookup('storage:main');
-    model = Em.run( Photo, 'create', {
-      title: "Work in progress",
-      description: "This item is incomplete."
-    });
-    Em.run( storage, 'create', model );
+    App = startApp();
+		Em.run(function(){
+			pouch = App.__container__.lookup('pouch:main');
+			model = Photo.create({
+				title: "Work in progress",
+				description: "This item is incomplete."
+			});
+			pouch.POST(model);
+		});		
   },
   teardown: function() {
-    deletePhotos();
+    Ember.run(App, 'destroy');
   }
-});
+});	
 
 test("required exist", function(){
-  equal(Em.typeOf(storage), 'instance');
+  equal(Em.typeOf(pouch), 'instance');
   equal(Em.typeOf(model), 'instance');
   equal(Em.typeOf(model.get('title')), 'string');
   ok( model.get('title') !== '' );
 });
 
 test("renders", function(){
-  visit('/photo/%@/edit'.fmt(model.get('guid')))
+  visit('/photo/%@/edit'.fmt(model.get('id')))
     .then(function(){
       ok(find("#inputTitle").val() === 'Work in progress');
       ok(find("#textareaDescription").val() === "This item is incomplete.");
     });
 });
 
-test("discards", function(){
-  guid = model.get('guid');
-
-  visit('/photo/%@/edit'.fmt(model.get('guid')))
+asyncTest("discards", function(){
+	expect(3);
+  id = model.get('id');
+  visit('/photo/%@/edit'.fmt(model.get('id')))
     .then(function(){
       equal(find('#inputTitle').val(), 'Work in progress');
     })
@@ -49,8 +48,11 @@ test("discards", function(){
       return click("button:contains('Cancel')");
     })
     .then(function(){
-      var stored = storage.find( Photo, guid );
-      equal(Em.typeOf(stored), 'instance');
-      equal(stored.get('title'), "Work in progress");
+			pouch.GET( id ).then(function(stored){
+				equal(Em.typeOf(stored), 'instance');
+				equal(stored.get('title'), "Work in progress");
+				start();
+			});
+			stop();
     }); 
 });

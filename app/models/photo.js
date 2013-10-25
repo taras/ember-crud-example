@@ -1,4 +1,4 @@
-import Model from 'ember-crud-example/models/index';
+import {Model} from 'ember-pouchdb/model';
 
 var Photo = Model.extend({
   image: null,
@@ -15,13 +15,8 @@ var Photo = Model.extend({
   // Tells the resistance layer what properties to save to localStorage
   // Ember Data does this for you.
   serialize: function() {
-    return this.getProperties([ "guid", "image", "title", "description" ]);
+    return this.getProperties([ "image", "title", "description" ]);
   }
-});
-
-// set storage key for this class of models
-Photo.reopenClass({
-  storageKey: 'photo'
 });
 
 export default Photo;

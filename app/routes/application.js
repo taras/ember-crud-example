@@ -1,5 +1,3 @@
-import Photo from 'ember-crud-example/models/photo';
-
 var ApplicationRoute = Ember.Route.extend({
   actions: {
     goToNewPhoto: function() {
@@ -12,23 +10,18 @@ var ApplicationRoute = Ember.Route.extend({
       this.transitionTo('photo.edit', model.copy());
     },
     create: function(model) {
-      this.storage.create(model);
+      this.pouch.POST(model);
     },
     update: function(model) {
-      this.storage.update(model);
+      this.pouch.PUT(model);
     },
     "delete": function(model) {
-      this.storage.delete(model);
+      this.pouch.DELETE(model);
       model.destroy();
     },
     cancel: function(model) {
-      Ember.run(model, "destroy");
-      this.transitionTo('photos');
+      model.destroy();
     }
-  },
-  model: function() {
-    Ember.assert("App expects storage to be present", Ember.typeOf(this.storage) === 'instance');
-    return promise;
   }
 });
 

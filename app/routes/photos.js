@@ -8,7 +8,7 @@ var PhotosRoute = Ember.Route.extend({
     }
   },
   model: function() {
-    return this.storage.findAll(Photo);
+    return this.pouch.findAll('photo');
   }
 });
 

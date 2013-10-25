@@ -1,8 +1,11 @@
-import App from 'ember-crud-example/app';
+var App;
 
 module("Acceptances - Index", {
   setup: function(){
-    App.reset();
+    App = startApp();
+  },
+  teardown: function() {
+    Ember.run(App, 'destroy');
   }
 });
 

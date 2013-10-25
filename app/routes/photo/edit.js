@@ -6,6 +6,7 @@ var PhotoEditRoute = Ember.Route.extend({
     },
     cancel: function() {
       this.transitionTo('photos');
+			return true;
     }
   }
 });

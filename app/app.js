@@ -1,17 +1,30 @@
 import Resolver from 'resolver';
-import routes from 'ember-crud-example/routes';
-import storage from 'ember-crud-example/initializers/storage';
+import registerComponents from 'ember-crud-example/utils/register_components';
+import Photo from 'ember-crud-example/models/photo';
+import {initializer} from 'ember-pouchdb/initializer';
 
-var App = Ember.Application.create({
+var App = Ember.Application.extend({
   LOG_ACTIVE_GENERATION: true,
+  LOG_MODULE_RESOLVER: true,
+  LOG_TRANSITIONS: true,
+  LOG_TRANSITIONS_INTERNAL: true,
   LOG_VIEW_LOOKUPS: true,
   rootElement: "#ember-crud-example",
   modulePrefix: 'ember-crud-example', 
   Resolver: Resolver
 });
 
-App.Router.map(routes);
+App.initializer({
+  name: 'Register Components',
+  initialize: function(container, application) {
+    registerComponents(container);
+  }
+});
 
-Ember.Application.initializer(storage);
+App.initializer(initializer({
+	docTypes: {
+		photo: Photo
+	}	
+}));
 
 export default App;

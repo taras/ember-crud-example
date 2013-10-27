@@ -2,14 +2,17 @@ var App;
 
 module("Acceptances - Photos New", {
   setup: function(){
+    debugger;
     App = startApp();
   },
   teardown: function() {
+    deleteDB(App);    
     Ember.run(App, 'destroy');
   }
 });
 
 test("renders", function(){
+  expect(2);
   visit('/photo/new').then(function(){
     ok(exists("legend:contains('New photo')"));
     ok(exists("button:contains('Create')"));
@@ -17,7 +20,7 @@ test("renders", function(){
 });
 
 test("creates", function(){
-
+  expect(2);
   var itemCount;
 
   visit('/')

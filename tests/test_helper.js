@@ -2,8 +2,9 @@ document.write('<div id="ember-testing-container"><div id="ember-testing"></div>
 
 Ember.testing = true;
 
-window.startApp          = require('appkit/tests/helpers/start_app');
-window.isolatedContainer = require('appkit/tests/helpers/isolated_container');
+window.startApp          = require('ember-crud-example/tests/helpers/start_app');
+window.isolatedContainer = require('ember-crud-example/tests/helpers/isolated_container');
+window.deleteDB          = require('ember-crud-example/tests/helpers/delete_db');
 
 function exists(selector) {
   return !!find(selector).length;

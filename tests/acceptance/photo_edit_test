@@ -4,6 +4,7 @@ var pouch, model, id, App;
 
 module("Acceptances - Photo Edit", {
   setup: function(){
+    stop();
     App = startApp();
 		Em.run(function(){
 			pouch = App.__container__.lookup('pouch:main');
@@ -11,33 +12,43 @@ module("Acceptances - Photo Edit", {
 				title: "Work in progress",
 				description: "This item is incomplete."
 			});
-			pouch.POST(model);
+			pouch.POST(model).then(function(newModel){
+        model = newModel;
+        id = model.get('id');
+			  start();
+			});
 		});		
   },
   teardown: function() {
+    deleteDB(App);
     Ember.run(App, 'destroy');
   }
 });	
 
 test("required exist", function(){
+  expect(4);
+  console.log("Checking that required exist.");
   equal(Em.typeOf(pouch), 'instance');
   equal(Em.typeOf(model), 'instance');
   equal(Em.typeOf(model.get('title')), 'string');
   ok( model.get('title') !== '' );
 });
 
-test("renders", function(){
-  visit('/photo/%@/edit'.fmt(model.get('id')))
+asyncTest("renders", function(){
+  expect(2);
+  console.log("Check that edit renders");  
+  visit('/photo/%@/edit'.fmt(id))
     .then(function(){
       ok(find("#inputTitle").val() === 'Work in progress');
       ok(find("#textareaDescription").val() === "This item is incomplete.");
+      start();
     });
 });
 
 asyncTest("discards", function(){
 	expect(3);
-  id = model.get('id');
-  visit('/photo/%@/edit'.fmt(model.get('id')))
+  console.log("Check discards");  
+  visit('/photo/%@/edit'.fmt(id))
     .then(function(){
       equal(find('#inputTitle').val(), 'Work in progress');
     })
@@ -53,6 +64,5 @@ asyncTest("discards", function(){
 				equal(stored.get('title'), "Work in progress");
 				start();
 			});
-			stop();
     }); 
 });

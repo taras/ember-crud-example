@@ -5,12 +5,17 @@ module("Acceptances - Index", {
     App = startApp();
   },
   teardown: function() {
+    deleteDB(App);
     Ember.run(App, 'destroy');
   }
 });
 
-test("index renders", function(){
-  visit('/').then(function(){
-    ok(exists(".btn.new:contains('New photo')"));
-  });
+asyncTest("index renders", function(){
+  expect(1);
+  Ember.run.later(function(){
+    visit('/').then(function(){
+      ok(exists(".btn.new:contains('New photo')"));
+      start();   
+    });
+  }, 30);
 });

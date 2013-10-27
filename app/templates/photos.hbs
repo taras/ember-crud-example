@@ -9,9 +9,9 @@
     </tr>
     {{#each}}
       <tr>
-        <td {{action 'goToPhoto' this}}><img class="thumbnail" {{bind-attr src=thumbnail}} /></td>
-        <td {{action 'goToPhoto' this}}>{{title}}</td>
-        <td {{action 'goToPhoto' this}}>{{description}}</td>
+        <td>{{#link-to 'photo' this}}<img class="thumbnail" {{bind-attr src=thumbnail}} />{{/link-to}}</td>
+        <td>{{#link-to 'photo' this}}{{title}}{{/link-to}}</td>
+        <td>{{#link-to 'photo' this}}{{description}}{{/link-to}}</td>
         <td>
           <span class="edit glyphicon glyphicon-edit" {{action 'edit' this}}></span>
           <span class="remove glyphicon glyphicon-remove-circle" {{action 'delete' this}}></span>

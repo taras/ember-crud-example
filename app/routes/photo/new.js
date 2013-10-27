@@ -2,9 +2,11 @@ import Photo from 'ember-crud-example/models/photo';
 
 var PhotoNewRoute = Ember.Route.extend({
   actions: {
-    create: function() {
-      this.transitionTo('photos');
-      return true; // allow action to continue to bubble up to ApplicationRoute
+    create: function(model) {
+			var that = this;
+			this.pouch.POST(model).then(function(){
+				that.transitionTo('photos');				
+			});
     },
     cancel: function() {
       this.transitionTo('photos');

@@ -1,7 +1,6 @@
 import Resolver from 'resolver';
-import registerComponents from 'ember-crud-example/utils/register_components';
-import Photo from 'ember-crud-example/models/photo';
-import {initializer} from 'ember-pouchdb/initializer';
+import registerComponents from 'ember-crud-example/initializers/register_components';
+import initializePouchDB from 'ember-crud-example/initializers/initialize_pouchdb'; 
 
 var App = Ember.Application.extend({
   LOG_ACTIVE_GENERATION: true,
@@ -14,17 +13,10 @@ var App = Ember.Application.extend({
   Resolver: Resolver
 });
 
-App.initializer({
-  name: 'Register Components',
-  initialize: function(container, application) {
-    registerComponents(container);
-  }
-});
+var createApp = function() {
+	App.initializer(registerComponents);
+	App.initializer(initializePouchDB);
+	return App.create();
+};
 
-App.initializer(initializer({
-	docTypes: {
-		photo: Photo
-	}	
-}));
-
-export default App;
+export { App, createApp };

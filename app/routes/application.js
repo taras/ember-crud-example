@@ -9,12 +9,6 @@ var ApplicationRoute = Ember.Route.extend({
     edit: function(model) {
       this.transitionTo('photo.edit', model.copy());
     },
-    create: function(model) {
-      this.pouch.POST(model);
-    },
-    update: function(model) {
-      this.pouch.PUT(model);
-    },
     "delete": function(model) {
       this.pouch.DELETE(model);
       model.destroy();

@@ -31,5 +31,5 @@ asyncTest("Create a new item", function(){
           });            
       });
     });        
-  })    
+  });
 });

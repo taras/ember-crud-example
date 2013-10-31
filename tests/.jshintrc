@@ -38,7 +38,7 @@
     "keyEvent",
     "isolatedContainer",
     "startApp",
-    "deleteDB"
+    "Pouch"
   ],
   "node" : false,
   "browser" : false,

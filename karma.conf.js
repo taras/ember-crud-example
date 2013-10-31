@@ -13,7 +13,7 @@ module.exports = function(config) {
       '../../vendor/resolver.js',
       '../../vendor/jquery/jquery.js',
       '../../vendor/handlebars/handlebars.js',
-      '../../vendor/ember/ember.js',
+      '../../vendor/ember-canary/index.js',
       '../../vendor/pouchdb-nightly.js/index.js',
       '../../vendor/ember-pouchdb/dist/ember-pouchdb.amd.js',
       'assets/templates.js',

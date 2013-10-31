@@ -4,7 +4,6 @@ Ember.testing = true;
 
 window.startApp          = require('ember-crud-example/tests/helpers/start_app');
 window.isolatedContainer = require('ember-crud-example/tests/helpers/isolated_container');
-window.deleteDB          = require('ember-crud-example/tests/helpers/delete_db');
 
 function exists(selector) {
   return !!find(selector).length;

@@ -6,6 +6,7 @@
     "jquery": "~2.0.3",
     "qunit": "~1.12.0",
     "bootstrap": "~3.0.0",
-    "ember-pouchdb": "~0.1.5"
+    "ember-pouchdb": "~0.1.7",
+    "ember-canary": "http://builds.emberjs.com.s3.amazonaws.com/canary/ember.js"
   }
 }

@@ -1,7 +1,7 @@
 import Photo from 'ember-crud-example/models/photo';
-import {initializer} from 'ember-pouchdb/initializer';
+import {get_initializer} from 'ember-pouchdb/get_initializer';
 
-var initializePouchDB = initializer({
+var initializePouchDB = get_initializer({
 	docTypes: {
 		photo: Photo
 	}	

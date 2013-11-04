@@ -24,8 +24,6 @@ Application.reopenClass(PouchDestroyer);
 function startApp(attrs) {
   var App;
   
-  window.location.hash = "";
-  
   var attributes = Ember.merge({
     // useful Test defaults
     rootElement: '#ember-testing',
@@ -41,6 +39,8 @@ function startApp(attrs) {
     App.setupForTesting();
     App.injectTestHelpers();
   });
+
+  window.location.hash = "";
 
   App.reset(); // this shouldn't be needed, i want to be able to "start an app at a specific URL"
 
